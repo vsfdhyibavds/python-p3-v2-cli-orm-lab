@@ -65,31 +65,88 @@ def delete_department():
         print(f'Department {id_} not found')
 
 
-# You'll implement the employee functions in the lab
+# Implementing the employee functions
+
 
 def list_employees():
-    pass
+    employees = Employee.get_all()
+    for employee in employees:
+        print(employee)
 
 
 def find_employee_by_name():
-    pass
+    name = input("Enter the employee's name: ")
+    employee = Employee.find_by_name(name)
+    if employee:
+        print(employee)
+    else:
+        print(f'Employee {name} not found')
 
 
 def find_employee_by_id():
-    pass
+    id_ = input("Enter the employee's id: ")
+    employee = Employee.find_by_id(id_)
+    if employee:
+        print(employee)
+    else:
+        print(f'Employee {id_} not found')
 
 
 def create_employee():
-    pass
+    name = input("Enter the employee's name: ")
+    job_title = input("Enter the employee's job title: ")
+    try:
+        department_id = int(input("Enter the employee's department id: "))
+    except ValueError:
+        print("Error creating employee: department_id must be an integer")
+        return
+
+    try:
+        employee = Employee.create(name, job_title, department_id)
+        print(f'Success: {employee}')
+    except Exception as exc:
+        print("Error creating employee: ", exc)
 
 
 def update_employee():
-    pass
+    id_ = input("Enter the employee's id: ")
+    employee = Employee.find_by_id(id_)
+    if not employee:
+        print(f'Employee {id_} not found')
+        return
+
+    try:
+        name = input("Enter the employee's new name: ")
+        employee.name = name
+        job_title = input("Enter the employee's new job title: ")
+        employee.job_title = job_title
+        department_id = int(input("Enter the employee's new department id: "))
+        employee.department_id = department_id
+
+        employee.update()
+        print(f'Success: {employee}')
+    except Exception as exc:
+        print("Error updating employee: ", exc)
 
 
 def delete_employee():
-    pass
+    id_ = input("Enter the employee's id: ")
+    employee = Employee.find_by_id(id_)
+    if not employee:
+        print(f'Employee {id_} not found')
+        return
+
+    employee.delete()
+    print(f'Employee {id_} deleted')
 
 
 def list_department_employees():
-    pass
+    id_ = input("Enter the department's id: ")
+    department = Department.find_by_id(id_)
+    if not department:
+        print(f'Department {id_} not found')
+        return
+
+    employees = department.employees()
+    for employee in employees:
+        print(employee)
